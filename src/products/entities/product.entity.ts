@@ -1,9 +1,11 @@
+import { ProductImage } from '../entities';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   BeforeInsert,
   BeforeUpdate,
+  OneToMany,
 } from 'typeorm';
 
 @Entity()
@@ -37,6 +39,12 @@ export class Product {
 
   @Column('text', { array: true, default: [] })
   tags: string[];
+
+  @OneToMany(() => ProductImage, (productImage) => productImage.product, {
+    cascade: true,
+    eager: true,
+  })
+  images?: ProductImage[];
 
   @BeforeInsert()
   generateSlug() {
