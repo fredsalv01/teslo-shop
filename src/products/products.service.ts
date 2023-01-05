@@ -144,7 +144,7 @@ export class ProductsService {
   // seeder
   async deleteAllProducts() {
     console.log('paso por aqui');
-    const query = this.productImageRepository.createQueryBuilder('product');
+    const query = this.productRepository.createQueryBuilder('product');
     try {
       return await query.delete().where({}).execute();
     } catch (error) {
