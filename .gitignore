@@ -37,3 +37,4 @@ lerna-debug.log*
 #docker
 /postgres
 /static/products
+/public/products
