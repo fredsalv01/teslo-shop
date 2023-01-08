@@ -40,7 +40,7 @@ export class AuthService {
       const { email, password } = loginUserDto;
       const user = await this.userRepository.findOne({
         where: { email },
-        select: ['email', 'password', 'roles'],
+        select: ['id', 'email', 'password', 'roles'],
       });
       if (!user) {
         throw new UnauthorizedException('El email es incorrecto');
@@ -50,7 +50,11 @@ export class AuthService {
       }
       delete user.password;
       return {
-        token: this.getJwtToken({ email: user.email, roles: user.roles }),
+        token: this.getJwtToken({
+          email: user.email,
+          roles: user.roles,
+          id: user.id,
+        }),
       };
     } catch (error) {
       Logger.error(error);
