@@ -1,4 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BeforeInsert,
+  BeforeUpdate,
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('users')
 export class User {
@@ -17,7 +23,7 @@ export class User {
   @Column('text', { unique: true, nullable: false })
   email: string;
 
-  @Column('text', { nullable: false })
+  @Column('text', { nullable: false, select: false })
   password: string;
 
   @Column('bool', { default: true })
@@ -25,4 +31,14 @@ export class User {
 
   @Column('text', { array: true, default: ['user'] })
   roles: string[];
+
+  @BeforeInsert()
+  checkFieldsBeforeInsert() {
+    this.email = this.email.toLowerCase().trim();
+  }
+
+  @BeforeUpdate()
+  checkFieldsBeforeUpdate() {
+    this.checkFieldsBeforeInsert();
+  }
 }

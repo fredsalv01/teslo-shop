@@ -3,18 +3,22 @@ import {
   Logger,
   BadRequestException,
   InternalServerErrorException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
+import { LoginUserDto, CreateUserDto } from './dto';
+import { JwtPayload } from './interfaces/jwt-payload.interface';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly jwtService: JwtService,
   ) {}
   async create(createUserDto: CreateUserDto) {
     try {
@@ -24,12 +28,38 @@ export class AuthService {
         password: bcrypt.hashSync(password, 10),
       });
       await this.userRepository.save(user);
-      delete user.password;
       return user;
     } catch (error) {
       Logger.error(error);
       this.handleDBErrors(error);
     }
+  }
+
+  async login(loginUserDto: LoginUserDto) {
+    try {
+      const { email, password } = loginUserDto;
+      const user = await this.userRepository.findOne({
+        where: { email },
+        select: ['email', 'password', 'roles'],
+      });
+      if (!user) {
+        throw new UnauthorizedException('El email es incorrecto');
+      }
+      if (!bcrypt.compareSync(password, user.password)) {
+        throw new UnauthorizedException('La contraseña es incorrecta');
+      }
+      delete user.password;
+      return {
+        token: this.getJwtToken({ email: user.email, roles: user.roles }),
+      };
+    } catch (error) {
+      Logger.error(error);
+      this.handleDBErrors(error);
+    }
+  }
+
+  private getJwtToken(payload: JwtPayload) {
+    return this.jwtService.sign(payload);
   }
 
   private handleDBErrors(error: any): never {
