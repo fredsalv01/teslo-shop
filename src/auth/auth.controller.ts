@@ -7,10 +7,13 @@ import {
   Param,
   Delete,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
+import { GetUser } from './decorators/get-user.decorator';
 import { LoginUserDto, CreateUserDto } from './dto';
+import { User } from './entities/user.entity';
 
 @Controller('auth')
 export class AuthController {
@@ -28,10 +31,13 @@ export class AuthController {
 
   @Get('private')
   @UseGuards(AuthGuard())
-  testingPrivateRoute() {
+  GetAuthUserInfo(
+    // @Req() request: Express.Request
+    @GetUser() user: User,
+  ) {
+    // console.log({ user: request.user });
     return {
-      ok: true,
-      message: 'This is a private route',
+      user,
     };
   }
 }
