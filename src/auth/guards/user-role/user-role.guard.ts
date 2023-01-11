@@ -1,4 +1,4 @@
-import { META_ROLES } from './../../decorators/role-protected/role-protected.decorator';
+import { META_ROLES } from '../../decorators/role-protected.decorator';
 import {
   CanActivate,
   ExecutionContext,
