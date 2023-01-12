@@ -62,6 +62,22 @@ export class AuthService {
     }
   }
 
+  refresh(refreshToken: string) {
+    try {
+      const user = this.jwtService.decode(refreshToken) as JwtPayload;
+      return {
+        token: this.getJwtToken({
+          email: user.email,
+          roles: user.roles,
+          id: user.id,
+        }),
+      };
+    } catch (error) {
+      Logger.error(error);
+      throw new UnauthorizedException('El token no es válido');
+    }
+  }
+
   private getJwtToken(payload: JwtPayload) {
     return this.jwtService.sign(payload);
   }
