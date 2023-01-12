@@ -7,7 +7,6 @@ export class SeedService {
   constructor(private readonly productService: ProductsService) {}
   async executeSeed() {
     await this.insertNewProducts();
-    console.log('SeedService.executeSeed()');
   }
 
   private async insertNewProducts() {

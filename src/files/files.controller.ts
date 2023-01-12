@@ -50,9 +50,9 @@ export class FilesController {
       throw new BadRequestException('No se ha seleccionado ningun archivo!');
     }
 
-    const secureURL = `${this.configService.get(
-      'HOST_API',
-    )}/files/product/${file.filename}`;
+    const secureURL = `${this.configService.get('HOST_API')}/files/product/${
+      file.filename
+    }`;
 
     return {
       secure_url: secureURL,

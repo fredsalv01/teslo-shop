@@ -6,7 +6,6 @@ import { join } from 'path';
 export class FilesService {
   getStaticProductImage(imageName: string) {
     const path = join(__dirname, `../../static/products/`, imageName);
-    console.log(path);
     if (!existsSync(path)) {
       throw new BadRequestException(
         `No existe el producto con la imagen ${imageName}`,

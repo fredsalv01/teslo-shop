@@ -12,6 +12,7 @@ import { Auth } from './decorators';
 import { GetUser } from './decorators/get-user.decorator';
 import { LoginUserDto, CreateUserDto } from './dto';
 import { User } from './entities/user.entity';
+import { ValidRoles } from './interfaces';
 
 @Controller('auth')
 export class AuthController {
@@ -28,7 +29,7 @@ export class AuthController {
   }
 
   @Get('private')
-  @Auth()
+  @Auth(ValidRoles.superUser, ValidRoles.admin)
   GetAuthUserInfo(@GetUser() user: User) {
     return {
       user,
