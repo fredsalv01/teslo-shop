@@ -15,7 +15,7 @@ import { CategoriesModule } from './categories/categories.module';
     // Import the module as shown below
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
-      type: 'postgres',
+      type: 'mysql',
       host: process.env.DB_HOST,
       port: parseInt(process.env.DB_PORT),
       database: process.env.DB_NAME,
