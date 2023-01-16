@@ -17,6 +17,9 @@ export class Category {
   @Column('text', { unique: true, nullable: false })
   slug: string;
 
+  @Column('boolean', { default: true })
+  is_active: boolean;
+
   @Column('timestamptz', {
     nullable: false,
     default: () => 'CURRENT_TIMESTAMP',
@@ -43,6 +46,10 @@ export class Category {
 
   @BeforeUpdate()
   checkUpdateSlug() {
-    this.generateSlug();
+    this.slug = this.name;
+    this.slug = this.slug
+      .toLowerCase()
+      .replaceAll(' ', '_')
+      .replaceAll(/[^a-z0-9_]/g, '');
   }
 }
