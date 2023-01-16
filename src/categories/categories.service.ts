@@ -1,9 +1,14 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateCategoryDto, UpdateCategoryDto } from './dto';
 import { Category } from './entities/category.entity';
 import {} from './dto/update-category.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { PaginationDto } from 'src/common/dtos/pagination.dto';
 import {
   IPaginationOptions,
@@ -17,6 +22,7 @@ export class CategoriesService {
   constructor(
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
+    private readonly dataSource: DataSource,
   ) {}
 
   async create(createCategoryDto: CreateCategoryDto) {
@@ -39,20 +45,53 @@ export class CategoriesService {
     return await this.paginate(options);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
+  async findOne(id: number) {
+    const category = await this.categoryRepository.findOne({
+      where: { id, is_active: true },
+    });
+    if (!category) {
+      throw new NotFoundException(`Category with id ${id} not found`);
+    }
+    return category;
   }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+  async update(id: number, updateCategoryDto: UpdateCategoryDto) {
+    const category = await this.categoryRepository.preload({
+      id: id,
+      ...updateCategoryDto,
+    });
+
+    if (!category)
+      throw new NotFoundException(`Category with id ${id} not found`);
+
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      await queryRunner.manager.save(category);
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+      return category;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      this.handleDBExceptions(error);
+    }
   }
 
   remove(id: number) {
-    return `This action removes a #${id} category`;
+    const category = this.categoryRepository.findOne({ where: { id } });
+    if (!category) {
+      throw new NotFoundException(`Category with id ${id} not found`);
+    }
+    this.categoryRepository.update({ id }, { is_active: false });
+    return { message: `The category with id ${id} has been inactivated` };
   }
 
   async paginate(options: IPaginationOptions): Promise<Pagination<Category>> {
-    const qb = this.categoryRepository.createQueryBuilder('q');
+    const qb = this.categoryRepository
+      .createQueryBuilder('q')
+      .andWhere('q.is_active = true');
     qb.orderBy('q.id', 'DESC');
     return await paginate<Category>(qb, options);
   }
