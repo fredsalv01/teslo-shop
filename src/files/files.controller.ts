@@ -56,6 +56,7 @@ export class FilesController {
 
     return {
       secure_url: secureURL,
+      file_name: file.filename,
     };
   }
 }

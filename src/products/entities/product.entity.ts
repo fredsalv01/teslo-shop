@@ -28,17 +28,11 @@ export class Product {
   @Column('text', { unique: true })
   slug: string;
 
-  @Column('int', { default: 0 })
-  stock: number;
-
-  @Column('text', { array: true })
-  sizes: string[];
-
   @Column('text')
-  gender: string;
+  sku: string;
 
-  @Column('text', { array: true, default: [] })
-  tags: string[];
+  @Column('int', { default: 0 })
+  available: number;
 
   @OneToMany(() => ProductImage, (productImage) => productImage.product, {
     cascade: true,
