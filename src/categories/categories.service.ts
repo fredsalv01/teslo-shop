@@ -30,13 +30,13 @@ export class CategoriesService {
     return 'This action adds a new category';
   }
 
-  findAll(paginationDto: PaginationDto) {
+  async findAll(paginationDto: PaginationDto) {
     const options = {
       page: paginationDto.page || 1,
       limit: paginationDto.limit || 10,
     };
 
-    return this.paginate(options);
+    return await this.paginate(options);
   }
 
   findOne(id: number) {
@@ -52,8 +52,8 @@ export class CategoriesService {
   }
 
   async paginate(options: IPaginationOptions): Promise<Pagination<Category>> {
-    const qb = this.categoryRepository.createQueryBuilder('category');
-    qb.orderBy('category.id', 'DESC');
+    const qb = this.categoryRepository.createQueryBuilder('q');
+    qb.orderBy('q.id', 'DESC');
     return await paginate<Category>(qb, options);
   }
 
