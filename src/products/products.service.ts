@@ -11,6 +11,8 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { validate as isUUID, validate } from 'uuid';
 import { ProductImage, Product } from './entities';
+import { IPaginationOptions, Pagination } from 'nestjs-typeorm-paginate';
+import { paginate } from 'nestjs-typeorm-paginate/dist/paginate';
 @Injectable()
 export class ProductsService {
   private readonly logger = new Logger('ProductsService');
@@ -44,17 +46,13 @@ export class ProductsService {
 
   async findAll(paginationDto: PaginationDto) {
     const { limit = 10, offset = 0 } = paginationDto;
-    const products = await this.productRepository.find({
-      take: limit,
-      skip: offset,
-      relations: {
-        images: true,
-      },
-    });
-    return products.map((product) => ({
-      ...product,
-      images: product.images.map((image) => image.url),
-    }));
+    const options = {
+      page: paginationDto.page || 1,
+      limit: paginationDto.limit || 10,
+    };
+    
+    const pagination = await this.paginate(options);
+    return pagination;
   }
 
   async findOne(term: string) {
@@ -149,5 +147,9 @@ export class ProductsService {
     } catch (error) {
       this.handleDBExceptions(error);
     }
+  }
+
+  async paginate(options: IPaginationOptions): Promise<Pagination<Product>> {
+    return await paginate(this.productRepository, options);
   }
 }
