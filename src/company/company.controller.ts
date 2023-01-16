@@ -6,7 +6,9 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
+import { PaginationDto } from 'src/common/dtos/pagination.dto';
 import { CompanyService } from './company.service';
 import { CreateCompanyDto, UpdateCompanyDto } from './dto';
 
@@ -20,8 +22,8 @@ export class CompanyController {
   }
 
   @Get()
-  findAll() {
-    return this.companyService.findAll();
+  findAll(@Query() paginationDto: PaginationDto) {
+    return this.companyService.findAll(paginationDto);
   }
 
   @Get(':id')

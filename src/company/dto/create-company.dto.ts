@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -14,17 +15,14 @@ export class CreateCompanyDto {
 
   @IsNotEmpty({ message: 'Comercial name is required' })
   @IsString()
-  @Length(55, 55)
   comercialName: string;
 
   @IsOptional()
-  @IsString()
-  @Length(14, 14)
-  status: string;
+  @IsBoolean()
+  status: boolean;
 
-  @IsNotEmpty({ message: 'Slug is required' })
+  @IsOptional()
   @IsString()
-  @Length(55, 55)
   slug: string;
 
   @IsNotEmpty({ message: 'Max users is required' })

@@ -1,4 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BeforeInsert,
+  BeforeUpdate,
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('companies')
 export class Company {
@@ -20,11 +26,10 @@ export class Company {
   comercialName: string;
 
   @Column({
-    type: 'varchar',
-    length: 14,
-    default: 'active',
+    type: 'boolean',
+    default: true,
   })
-  status: string;
+  status: boolean;
 
   @Column({
     type: 'varchar',
@@ -48,4 +53,27 @@ export class Company {
     default: () => 'CURRENT_TIMESTAMP',
   })
   updatedAt: Date;
+
+  @BeforeInsert()
+  updateSlugBeforeInsert() {
+    if (!this.slug) {
+      this.slug = this.comercialName;
+    }
+    this.slug = this.slug
+      .toLowerCase()
+      .replace(/ /g, '-')
+      .replace(/[^\w-]+/g, '');
+  }
+
+  @BeforeUpdate()
+  updateSlug() {
+    if (!this.slug) {
+      this.slug = this.comercialName;
+    }
+
+    this.slug = this.slug
+      .toLowerCase()
+      .replace(/ /g, '-')
+      .replace(/[^\w-]+/g, '');
+  }
 }
