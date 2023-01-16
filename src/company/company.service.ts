@@ -75,8 +75,6 @@ export class CompanyService {
       await queryRunner.release();
       this.handleDBExceptions(error);
     }
-
-    return `This action updates a #${id} company`;
   }
 
   remove(id: number) {
