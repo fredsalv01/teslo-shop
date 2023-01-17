@@ -1,6 +1,7 @@
 import {
   IsEmail,
   IsIn,
+  IsNumber,
   IsOptional,
   IsString,
   Matches,
@@ -32,6 +33,10 @@ export class CreateUserDto {
   @IsString({ message: 'El correo electrónico es obligatorio' })
   @IsEmail({}, { message: 'El correo electrónico no es válido' })
   email: string;
+
+  @IsNumber()
+  @IsOptional()
+  company: number;
 
   @IsString({ message: 'La contraseña es obligatoria' })
   @MinLength(6, { message: 'La contraseña debe tener al menos 6 caracteres' })

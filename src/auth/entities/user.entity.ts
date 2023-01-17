@@ -1,8 +1,10 @@
+import { Company } from 'src/company/entities/company.entity';
 import {
   BeforeInsert,
   BeforeUpdate,
   Column,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -31,6 +33,12 @@ export class User {
 
   @Column('text', { array: true, default: ['user'] })
   roles: string[];
+
+  @ManyToOne(() => Company, (company) => company.users, {
+    onDelete: 'CASCADE',
+    nullable: true,
+  })
+  company?: Company;
 
   @BeforeInsert()
   checkFieldsBeforeInsert() {

@@ -9,6 +9,6 @@ import { AuthModule } from '../auth/auth.module';
   controllers: [CompanyController],
   providers: [CompanyService],
   imports: [TypeOrmModule.forFeature([Company]), AuthModule],
-  exports: [TypeOrmModule],
+  exports: [TypeOrmModule, CompanyService],
 })
 export class CompanyModule {}
