@@ -77,14 +77,15 @@ export class CompanyService {
     }
   }
 
-  remove(id: number) {
-    const company = this.companyRepository.findOne({
+  async remove(id: number) {
+    const company = await this.companyRepository.findOne({
       where: { id, status: true },
     });
     if (!company) {
       throw new BadRequestException(`Company with id ${id} not found`);
     }
     this.companyRepository.update(id, { status: false });
+    await this.companyRepository.save(company);
     return { message: `Company with ${id} has been inactivated` };
   }
 
