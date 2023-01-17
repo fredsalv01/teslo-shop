@@ -4,14 +4,17 @@ import {
   BadRequestException,
   InternalServerErrorException,
   UnauthorizedException,
+  NotFoundException,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
-import { LoginUserDto, CreateUserDto } from './dto';
+import { LoginUserDto, CreateUserDto, RequestResetPasswordDto } from './dto';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { JwtService } from '@nestjs/jwt';
+import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class AuthService {
@@ -77,6 +80,22 @@ export class AuthService {
       Logger.error(error);
       throw new UnauthorizedException('El token no es válido');
     }
+  }
+
+  async requestResetPassword(
+    requestResetPasswordDto: RequestResetPasswordDto,
+  ): Promise<void> {
+    const { email } = requestResetPasswordDto;
+    const user = await this.userRepository.findOne({
+      where: { email },
+    });
+    if (!user) {
+      throw new UnprocessableEntityException('Esta acción no es válida');
+    }
+    user.resetPasswordToken = uuid();
+    await this.userRepository.save(user);
+    // TODO: Send email using email service
+
   }
 
   private getJwtToken(payload: JwtPayload) {

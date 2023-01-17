@@ -40,6 +40,9 @@ export class User {
   })
   company?: Company;
 
+  @Column('uuid', { unique: true, name: 'resetPasswordToken', nullable: true })
+  resetPasswordToken: string;
+
   @BeforeInsert()
   checkFieldsBeforeInsert() {
     this.email = this.email.toLowerCase().trim();
