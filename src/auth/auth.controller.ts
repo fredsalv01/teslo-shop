@@ -10,7 +10,12 @@ import {
 import { AuthService } from './auth.service';
 import { Auth } from './decorators';
 import { GetUser } from './decorators/get-user.decorator';
-import { LoginUserDto, CreateUserDto, RequestResetPasswordDto } from './dto';
+import {
+  LoginUserDto,
+  CreateUserDto,
+  RequestResetPasswordDto,
+  ResetPasswordDto,
+} from './dto';
 import { User } from './entities/user.entity';
 import { ValidRoles } from './interfaces';
 
@@ -41,10 +46,15 @@ export class AuthController {
     return this.authService.refresh(refreshToken);
   }
 
-  @Patch('reset-password')
+  @Patch('request-reset-password')
   requestResetPassword(
     @Body() requestResetPasswordDto: RequestResetPasswordDto,
   ): Promise<void> {
     return this.authService.requestResetPassword(requestResetPasswordDto);
+  }
+
+  @Patch('reset-password')
+  resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
+    return this.authService.resetPassword(resetPasswordDto);
   }
 }
