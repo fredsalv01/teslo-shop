@@ -11,7 +11,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
-import { LoginUserDto, CreateUserDto, RequestResetPasswordDto } from './dto';
+import {
+  LoginUserDto,
+  CreateUserDto,
+  RequestResetPasswordDto,
+  ResetPasswordDto,
+} from './dto';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { JwtService } from '@nestjs/jwt';
 import { v4 as uuid } from 'uuid';
@@ -95,7 +100,21 @@ export class AuthService {
     user.resetPasswordToken = uuid();
     await this.userRepository.save(user);
     // TODO: Send email using email service
+  }
 
+  async resetPassword(resetPasswordDto: ResetPasswordDto) {
+    const { resetPasswordToken, password } = resetPasswordDto;
+    const user = await this.userRepository.findOne({
+      where: { resetPasswordToken },
+    });
+    if (!user) {
+      throw new NotFoundException('El token no es válido');
+    }
+    user.password = bcrypt.hashSync(password, 10);
+    user.resetPasswordToken = null;
+    await this.userRepository.save(user);
+
+    return { message: 'Contraseña actualizada correctamente' };
   }
 
   private getJwtToken(payload: JwtPayload) {
