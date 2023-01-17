@@ -1,8 +1,10 @@
+import { User } from 'src/auth/entities/user.entity';
 import {
   BeforeInsert,
   BeforeUpdate,
   Column,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -53,6 +55,12 @@ export class Company {
     default: () => 'CURRENT_TIMESTAMP',
   })
   updatedAt: Date;
+
+  @OneToMany(() => User, (user) => user.company, {
+    cascade: true,
+    eager: true,
+  })
+  users?: User[];
 
   @BeforeInsert()
   updateSlugBeforeInsert() {
