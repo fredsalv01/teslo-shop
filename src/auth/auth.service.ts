@@ -20,6 +20,7 @@ import {
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { JwtService } from '@nestjs/jwt';
 import { v4 as uuid } from 'uuid';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class AuthService {
@@ -27,6 +28,7 @@ export class AuthService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly jwtService: JwtService,
+    private readonly mailService: MailService,
   ) {}
   async create(createUserDto: CreateUserDto) {
     try {
@@ -89,7 +91,7 @@ export class AuthService {
 
   async requestResetPassword(
     requestResetPasswordDto: RequestResetPasswordDto,
-  ): Promise<void> {
+  ) {
     const { email } = requestResetPasswordDto;
     const user = await this.userRepository.findOne({
       where: { email },
@@ -99,7 +101,10 @@ export class AuthService {
     }
     user.resetPasswordToken = uuid();
     await this.userRepository.save(user);
+
+    await this.mailService.sendResetPasswordToken(user, user.resetPasswordToken);
     // TODO: Send email using email service
+    return { message: 'Se ha enviado un email a tu cuenta' };
   }
 
   async resetPassword(resetPasswordDto: ResetPasswordDto) {
