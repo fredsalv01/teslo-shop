@@ -13,15 +13,15 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
         port: 587,
         secure: false,
         auth: {
-          user: 'frealbertm37@gmail.com',
-          pass: 'Josdav&fred37',
+          user: 'fredalbertm37@gmail.com',
+          pass: 'utrptewtsjncmdur',
         },
       },
       defaults: {
         from: '"Fred Foo 👻" <noreply@example.com>',
       },
       template: {
-        dir: join(__dirname + '/templates'),
+        dir: join(__dirname, 'templates'),
         adapter: new HandlebarsAdapter(),
         options: {
           strict: true,

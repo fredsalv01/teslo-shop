@@ -15,7 +15,9 @@ import { MailModule } from './mail/mail.module';
 @Module({
   imports: [
     // Import the module as shown below
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
