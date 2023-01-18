@@ -10,11 +10,14 @@ import { join } from 'path';
 import { AuthModule } from './auth/auth.module';
 import { CategoriesModule } from './categories/categories.module';
 import { CompanyModule } from './company/company.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
     // Import the module as shown below
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
@@ -35,6 +38,7 @@ import { CompanyModule } from './company/company.module';
     AuthModule,
     CategoriesModule,
     CompanyModule,
+    MailModule,
   ],
 })
 export class AppModule {}

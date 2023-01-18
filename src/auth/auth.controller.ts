@@ -49,7 +49,7 @@ export class AuthController {
   @Patch('request-reset-password')
   requestResetPassword(
     @Body() requestResetPasswordDto: RequestResetPasswordDto,
-  ): Promise<void> {
+  ) {
     return this.authService.requestResetPassword(requestResetPasswordDto);
   }
 
