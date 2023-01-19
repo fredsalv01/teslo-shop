@@ -6,21 +6,21 @@ import {
   UnauthorizedException,
   NotFoundException,
   UnprocessableEntityException,
-} from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { User } from './entities/user.entity';
-import * as bcrypt from 'bcrypt';
+} from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { User } from "./entities/user.entity";
+import * as bcrypt from "bcrypt";
 import {
   LoginUserDto,
   CreateUserDto,
   RequestResetPasswordDto,
   ResetPasswordDto,
-} from './dto';
-import { JwtPayload } from './interfaces/jwt-payload.interface';
-import { JwtService } from '@nestjs/jwt';
-import { v4 as uuid } from 'uuid';
-import { MailService } from 'src/mail/mail.service';
+} from "./dto";
+import { JwtPayload } from "./interfaces/jwt-payload.interface";
+import { JwtService } from "@nestjs/jwt";
+import { v4 as uuid } from "uuid";
+import { MailService } from "src/mail/mail.service";
 
 @Injectable()
 export class AuthService {
@@ -28,7 +28,7 @@ export class AuthService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly jwtService: JwtService,
-    private readonly mailService: MailService,
+    private readonly mailService: MailService
   ) {}
   async create(createUserDto: CreateUserDto) {
     try {
@@ -51,13 +51,13 @@ export class AuthService {
       const { email, password } = loginUserDto;
       const user = await this.userRepository.findOne({
         where: { email },
-        select: ['id', 'email', 'password', 'roles'],
+        select: ["id", "email", "password", "roles"],
       });
       if (!user) {
-        throw new UnauthorizedException('El email es incorrecto');
+        throw new UnauthorizedException("El email es incorrecto");
       }
       if (!bcrypt.compareSync(password, user.password)) {
-        throw new UnauthorizedException('La contraseña es incorrecta');
+        throw new UnauthorizedException("La contraseña es incorrecta");
       }
       delete user.password;
       return {
@@ -85,7 +85,7 @@ export class AuthService {
       };
     } catch (error) {
       Logger.error(error);
-      throw new UnauthorizedException('El token no es válido');
+      throw new UnauthorizedException("El token no es válido");
     }
   }
 
@@ -95,17 +95,17 @@ export class AuthService {
       where: { email },
     });
     if (!user) {
-      throw new UnprocessableEntityException('Esta acción no es válida');
+      throw new UnprocessableEntityException("Esta acción no es válida");
     }
     user.resetPasswordToken = uuid();
     await this.userRepository.save(user);
 
     await this.mailService.sendResetPasswordToken(
       user,
-      user.resetPasswordToken,
+      user.resetPasswordToken
     );
     // TODO: Send email using email service
-    return { message: 'Se ha enviado un email a tu cuenta' };
+    return { message: "Se ha enviado un email a tu cuenta" };
   }
 
   async resetPassword(resetPasswordDto: ResetPasswordDto) {
@@ -114,13 +114,13 @@ export class AuthService {
       where: { resetPasswordToken },
     });
     if (!user) {
-      throw new NotFoundException('El token no es válido');
+      throw new NotFoundException("El token no es válido");
     }
     user.password = bcrypt.hashSync(password, 10);
     user.resetPasswordToken = null;
     await this.userRepository.save(user);
 
-    return { message: 'Contraseña actualizada correctamente' };
+    return { message: "Contraseña actualizada correctamente" };
   }
 
   private getJwtToken(payload: JwtPayload) {
@@ -128,9 +128,9 @@ export class AuthService {
   }
 
   private handleDBErrors(error: any): never {
-    if (error.code === '23505') {
+    if (error.code === "23505") {
       throw new BadRequestException(
-        'El email o el documento ya se encuentra registrado',
+        "El email o el documento ya se encuentra registrado"
       );
     }
     throw new InternalServerErrorException(error);

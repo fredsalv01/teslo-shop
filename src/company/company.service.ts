@@ -1,28 +1,28 @@
-import { PaginationDto } from './../common/dtos/pagination.dto';
+import { PaginationDto } from "./../common/dtos/pagination.dto";
 import {
   BadRequestException,
   Injectable,
   Logger,
   NotFoundException,
-} from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
-import { CreateCompanyDto, UpdateCompanyDto } from './dto';
-import { Company } from './entities/company.entity';
+} from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { DataSource, Repository } from "typeorm";
+import { CreateCompanyDto, UpdateCompanyDto } from "./dto";
+import { Company } from "./entities/company.entity";
 import {
   IPaginationOptions,
   paginate,
   Pagination,
-} from 'nestjs-typeorm-paginate';
+} from "nestjs-typeorm-paginate";
 
 @Injectable()
 export class CompanyService {
-  private readonly logger = new Logger('CompaniesService');
+  private readonly logger = new Logger("CompaniesService");
 
   constructor(
     @InjectRepository(Company)
     private readonly companyRepository: Repository<Company>,
-    private readonly dataSource: DataSource,
+    private readonly dataSource: DataSource
   ) {}
 
   async create(createCompanyDto: CreateCompanyDto) {
@@ -96,9 +96,9 @@ export class CompanyService {
 
   async paginate(options: IPaginationOptions): Promise<Pagination<Company>> {
     const queryBuilder = this.companyRepository
-      .createQueryBuilder('company')
-      .andWhere('company.status = :status', { status: true })
-      .orderBy('company.id', 'DESC');
+      .createQueryBuilder("company")
+      .andWhere("company.status = :status", { status: true })
+      .orderBy("company.id", "DESC");
 
     return await paginate<Company>(queryBuilder, options);
   }

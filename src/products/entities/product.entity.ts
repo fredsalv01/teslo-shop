@@ -1,4 +1,4 @@
-import { ProductImage } from '../entities';
+import { ProductImage } from "../entities";
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -6,32 +6,32 @@ import {
   BeforeInsert,
   BeforeUpdate,
   OneToMany,
-} from 'typeorm';
+} from "typeorm";
 
-@Entity({ name: 'products' })
+@Entity({ name: "products" })
 export class Product {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column('text', { unique: true })
+  @Column("text", { unique: true })
   title: string;
 
   @Column({
-    type: 'text',
+    type: "text",
     nullable: true,
   })
   description: string;
 
-  @Column('float', { default: 0 })
+  @Column("float", { default: 0 })
   price: number;
 
-  @Column('text', { unique: true })
+  @Column("text", { unique: true })
   slug: string;
 
-  @Column('text')
+  @Column("text")
   sku: string;
 
-  @Column('int', { default: 0 })
+  @Column("int", { default: 0 })
   available: number;
 
   @OneToMany(() => ProductImage, (productImage) => productImage.product, {
@@ -48,8 +48,8 @@ export class Product {
 
     this.slug = this.slug
       .toLowerCase()
-      .replaceAll(' ', '_')
-      .replaceAll(/[^a-z0-9_]/g, '');
+      .replaceAll(" ", "_")
+      .replaceAll(/[^a-z0-9_]/g, "");
   }
 
   @BeforeUpdate()
@@ -60,7 +60,7 @@ export class Product {
 
     this.slug = this.slug
       .toLowerCase()
-      .replaceAll(' ', '_')
-      .replaceAll(/[^a-z0-9_]/g, '');
+      .replaceAll(" ", "_")
+      .replaceAll(/[^a-z0-9_]/g, "");
   }
 }
