@@ -3,26 +3,26 @@ import {
   Injectable,
   Logger,
   NotFoundException,
-} from '@nestjs/common';
-import { CreateCategoryDto, UpdateCategoryDto } from './dto';
-import { Category } from './entities/category.entity';
-import {} from './dto/update-category.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
-import { PaginationDto } from 'src/common/dtos/pagination.dto';
+} from "@nestjs/common";
+import { CreateCategoryDto, UpdateCategoryDto } from "./dto";
+import { Category } from "./entities/category.entity";
+import {} from "./dto/update-category.dto";
+import { InjectRepository } from "@nestjs/typeorm";
+import { DataSource, Repository } from "typeorm";
+import { PaginationDto } from "src/common/dtos/pagination.dto";
 import {
   IPaginationOptions,
   Pagination,
   paginate,
-} from 'nestjs-typeorm-paginate';
+} from "nestjs-typeorm-paginate";
 
 @Injectable()
 export class CategoriesService {
-  private readonly logger = new Logger('CategoriesService');
+  private readonly logger = new Logger("CategoriesService");
   constructor(
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
-    private readonly dataSource: DataSource,
+    private readonly dataSource: DataSource
   ) {}
 
   async create(createCategoryDto: CreateCategoryDto) {
@@ -33,7 +33,6 @@ export class CategoriesService {
     } catch (error) {
       this.handleDBExceptions(error);
     }
-    return 'This action adds a new category';
   }
 
   async findAll(paginationDto: PaginationDto) {
@@ -85,14 +84,14 @@ export class CategoriesService {
       throw new NotFoundException(`Category with id ${id} not found`);
     }
     this.categoryRepository.update({ id }, { is_active: false });
-    return { message: `The category with id ${id} has been inactivated` };
+    return { message: `The category with id ${id} has been deleted` };
   }
 
   async paginate(options: IPaginationOptions): Promise<Pagination<Category>> {
     const qb = this.categoryRepository
-      .createQueryBuilder('q')
-      .andWhere('q.is_active = true');
-    qb.orderBy('q.id', 'DESC');
+      .createQueryBuilder("q")
+      .andWhere("q.is_active = true");
+    qb.orderBy("q.id", "DESC");
     return await paginate<Category>(qb, options);
   }
 

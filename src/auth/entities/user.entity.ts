@@ -1,4 +1,4 @@
-import { Company } from 'src/company/entities/company.entity';
+import { Company } from "src/company/entities/company.entity";
 import {
   BeforeInsert,
   BeforeUpdate,
@@ -6,41 +6,41 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
-} from 'typeorm';
+} from "typeorm";
 
-@Entity('users')
+@Entity("users")
 export class User {
-  @PrimaryGeneratedColumn('increment')
+  @PrimaryGeneratedColumn("increment")
   id: number;
 
-  @Column('text', { nullable: true })
+  @Column("text", { nullable: true })
   fullname: string;
 
-  @Column('text', { nullable: false })
+  @Column("text", { nullable: false })
   documentType: string;
 
-  @Column('text', { unique: true, nullable: false })
+  @Column("text", { unique: true, nullable: false })
   documentNumber: string;
 
-  @Column('text', { unique: true, nullable: false })
+  @Column("text", { unique: true, nullable: false })
   email: string;
 
-  @Column('text', { nullable: false, select: false })
+  @Column("text", { nullable: false, select: false })
   password: string;
 
-  @Column('bool', { default: true })
+  @Column("bool", { default: true })
   isActive: boolean;
 
-  @Column('text', { array: true, default: ['user'] })
+  @Column("text", { array: true, default: ["user"] })
   roles: string[];
 
   @ManyToOne(() => Company, (company) => company.users, {
-    onDelete: 'CASCADE',
+    onDelete: "CASCADE",
     nullable: true,
   })
   company?: Company;
 
-  @Column('uuid', { unique: true, name: 'resetPasswordToken', nullable: true })
+  @Column("uuid", { unique: true, name: "resetPasswordToken", nullable: true })
   resetPasswordToken: string;
 
   @BeforeInsert()

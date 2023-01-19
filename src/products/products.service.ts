@@ -3,26 +3,26 @@ import {
   BadRequestException,
   NotFoundException,
   Logger,
-} from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { PaginationDto } from 'src/common/dtos/pagination.dto';
-import { DataSource, Repository } from 'typeorm';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
-import { validate } from 'uuid';
-import { ProductImage, Product } from './entities';
-import { IPaginationOptions, Pagination } from 'nestjs-typeorm-paginate';
-import { paginate } from 'nestjs-typeorm-paginate/dist/paginate';
+} from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { PaginationDto } from "src/common/dtos/pagination.dto";
+import { DataSource, Repository } from "typeorm";
+import { CreateProductDto } from "./dto/create-product.dto";
+import { UpdateProductDto } from "./dto/update-product.dto";
+import { validate } from "uuid";
+import { ProductImage, Product } from "./entities";
+import { IPaginationOptions, Pagination } from "nestjs-typeorm-paginate";
+import { paginate } from "nestjs-typeorm-paginate/dist/paginate";
 @Injectable()
 export class ProductsService {
-  private readonly logger = new Logger('ProductsService');
+  private readonly logger = new Logger("ProductsService");
 
   constructor(
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
     @InjectRepository(ProductImage)
     private readonly productImageRepository: Repository<ProductImage>,
-    private readonly dataSource: DataSource,
+    private readonly dataSource: DataSource
   ) {}
 
   async create(createProductDto: CreateProductDto) {
@@ -34,7 +34,7 @@ export class ProductsService {
         images: images.map((image) =>
           this.productImageRepository.create({
             url: image,
-          }),
+          })
         ),
       });
       await this.productRepository.save(product);
@@ -60,13 +60,13 @@ export class ProductsService {
     if (validate(term)) {
       product = await this.productRepository.findOneBy({ id: term });
     } else {
-      const queryBuilder = this.productRepository.createQueryBuilder('prod');
+      const queryBuilder = this.productRepository.createQueryBuilder("prod");
       product = await queryBuilder
-        .where('UPPER(title) =:title or slug =:slug', {
+        .where("UPPER(title) =:title or slug =:slug", {
           title: term.toUpperCase(),
           slug: term.toLowerCase(),
         })
-        .leftJoinAndSelect('prod.images', 'prodImages')
+        .leftJoinAndSelect("prod.images", "prodImages")
         .getOne();
     }
 
@@ -107,7 +107,7 @@ export class ProductsService {
         product.images = images.map((image) =>
           this.productImageRepository.create({
             url: image,
-          }),
+          })
         );
       } else {
         product.images = await this.productImageRepository.findBy({
@@ -140,7 +140,7 @@ export class ProductsService {
 
   // seeder
   async deleteAllProducts() {
-    const query = this.productRepository.createQueryBuilder('product');
+    const query = this.productRepository.createQueryBuilder("product");
     try {
       return await query.delete().where({}).execute();
     } catch (error) {

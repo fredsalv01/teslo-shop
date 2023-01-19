@@ -1,4 +1,4 @@
-import { User } from 'src/auth/entities/user.entity';
+import { User } from "src/auth/entities/user.entity";
 import {
   BeforeInsert,
   BeforeUpdate,
@@ -6,53 +6,53 @@ import {
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
-} from 'typeorm';
+} from "typeorm";
 
-@Entity('companies')
+@Entity("companies")
 export class Company {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({
-    type: 'varchar',
+    type: "varchar",
     length: 11,
     unique: true,
   })
   socialReason: string;
 
   @Column({
-    type: 'varchar',
+    type: "varchar",
     length: 55,
     unique: true,
   })
   comercialName: string;
 
   @Column({
-    type: 'boolean',
+    type: "boolean",
     default: true,
   })
   status: boolean;
 
   @Column({
-    type: 'varchar',
+    type: "varchar",
     length: 55,
   })
   slug: string;
 
   @Column({
-    type: 'integer',
+    type: "integer",
   })
   maxUsers: number;
 
   @Column({
-    type: 'timestamptz',
-    default: () => 'CURRENT_TIMESTAMP',
+    type: "timestamptz",
+    default: () => "CURRENT_TIMESTAMP",
   })
   createdAt: Date;
 
   @Column({
-    type: 'timestamptz',
-    default: () => 'CURRENT_TIMESTAMP',
+    type: "timestamptz",
+    default: () => "CURRENT_TIMESTAMP",
   })
   updatedAt: Date;
 
@@ -69,8 +69,8 @@ export class Company {
     }
     this.slug = this.slug
       .toLowerCase()
-      .replace(/ /g, '-')
-      .replace(/[^\w-]+/g, '');
+      .replace(/ /g, "-")
+      .replace(/[^\w-]+/g, "");
   }
 
   @BeforeUpdate()
@@ -81,7 +81,7 @@ export class Company {
 
     this.slug = this.slug
       .toLowerCase()
-      .replace(/ /g, '-')
-      .replace(/[^\w-]+/g, '');
+      .replace(/ /g, "-")
+      .replace(/[^\w-]+/g, "");
   }
 }

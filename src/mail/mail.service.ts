@@ -1,6 +1,6 @@
-import { MailerService } from '@nestjs-modules/mailer';
-import { Injectable } from '@nestjs/common';
-import { User } from 'src/auth/entities/user.entity';
+import { MailerService } from "@nestjs-modules/mailer";
+import { Injectable } from "@nestjs/common";
+import { User } from "src/auth/entities/user.entity";
 
 @Injectable()
 export class MailService {
@@ -10,8 +10,8 @@ export class MailService {
     const url = `http://localhost:3000/auth/reset-password/${token}`;
     await this.mailerService.sendMail({
       to: user.email,
-      subject: 'WashyWashy - Reset Password',
-      template: 'reset-password',
+      subject: "WashyWashy - Reset Password",
+      template: "reset-password",
       context: {
         name: user.fullname,
         url,

@@ -7,14 +7,14 @@ import {
   Param,
   Delete,
   Query,
-} from '@nestjs/common';
-import { Auth } from 'src/auth/decorators';
-import { ValidRoles } from 'src/auth/interfaces';
-import { PaginationDto } from 'src/common/dtos/pagination.dto';
-import { CompanyService } from './company.service';
-import { CreateCompanyDto, UpdateCompanyDto } from './dto';
+} from "@nestjs/common";
+import { Auth } from "src/auth/decorators";
+import { ValidRoles } from "src/auth/interfaces";
+import { PaginationDto } from "src/common/dtos/pagination.dto";
+import { CompanyService } from "./company.service";
+import { CreateCompanyDto, UpdateCompanyDto } from "./dto";
 
-@Controller('companies')
+@Controller("companies")
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
@@ -30,20 +30,20 @@ export class CompanyController {
     return this.companyService.findAll(paginationDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
+  @Get(":id")
+  findOne(@Param("id") id: string) {
     return this.companyService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch(":id")
   @Auth(ValidRoles.admin)
-  update(@Param('id') id: string, @Body() updateCompanyDto: UpdateCompanyDto) {
+  update(@Param("id") id: string, @Body() updateCompanyDto: UpdateCompanyDto) {
     return this.companyService.update(+id, updateCompanyDto);
   }
 
-  @Delete(':id')
+  @Delete(":id")
   @Auth(ValidRoles.admin)
-  remove(@Param('id') id: string) {
+  remove(@Param("id") id: string) {
     return this.companyService.remove(+id);
   }
 }

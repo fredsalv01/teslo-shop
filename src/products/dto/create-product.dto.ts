@@ -5,7 +5,7 @@ import {
   IsPositive,
   IsString,
   MinLength,
-} from 'class-validator';
+} from "class-validator";
 
 export class CreateProductDto {
   @IsString()

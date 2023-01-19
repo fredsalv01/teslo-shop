@@ -4,31 +4,31 @@ import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
-} from 'typeorm';
+} from "typeorm";
 
-@Entity('categories')
+@Entity("categories")
 export class Category {
-  @PrimaryGeneratedColumn('increment')
+  @PrimaryGeneratedColumn("increment")
   id: number;
 
-  @Column('text', { nullable: false })
+  @Column("text", { nullable: false })
   name: string;
 
-  @Column('text', { unique: true, nullable: false })
+  @Column("text", { unique: true, nullable: false })
   slug: string;
 
-  @Column('boolean', { default: true })
+  @Column("boolean", { default: true })
   is_active: boolean;
 
-  @Column('timestamptz', {
+  @Column("timestamptz", {
     nullable: false,
-    default: () => 'CURRENT_TIMESTAMP',
+    default: () => "CURRENT_TIMESTAMP",
   })
   created_at: Date;
 
-  @Column('timestamptz', {
+  @Column("timestamptz", {
     nullable: false,
-    default: () => 'CURRENT_TIMESTAMP',
+    default: () => "CURRENT_TIMESTAMP",
   })
   updated_at: Date;
 
@@ -40,8 +40,8 @@ export class Category {
 
     this.slug = this.slug
       .toLowerCase()
-      .replaceAll(' ', '_')
-      .replaceAll(/[^a-z0-9_]/g, '');
+      .replaceAll(" ", "_")
+      .replaceAll(/[^a-z0-9_]/g, "");
   }
 
   @BeforeUpdate()
@@ -49,7 +49,7 @@ export class Category {
     this.slug = this.name;
     this.slug = this.slug
       .toLowerCase()
-      .replaceAll(' ', '_')
-      .replaceAll(/[^a-z0-9_]/g, '');
+      .replaceAll(" ", "_")
+      .replaceAll(/[^a-z0-9_]/g, "");
   }
 }
