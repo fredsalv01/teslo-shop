@@ -45,7 +45,6 @@ export class ProductsService {
   }
 
   async findAll(paginationDto: PaginationDto) {
-    const { page, limit } = paginationDto;
     const options = {
       page: paginationDto.page || 1,
       limit: paginationDto.limit || 10,
