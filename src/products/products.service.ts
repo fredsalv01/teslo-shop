@@ -9,7 +9,7 @@ import { PaginationDto } from 'src/common/dtos/pagination.dto';
 import { DataSource, Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { validate as isUUID, validate } from 'uuid';
+import { validate } from 'uuid';
 import { ProductImage, Product } from './entities';
 import { IPaginationOptions, Pagination } from 'nestjs-typeorm-paginate';
 import { paginate } from 'nestjs-typeorm-paginate/dist/paginate';
@@ -45,12 +45,11 @@ export class ProductsService {
   }
 
   async findAll(paginationDto: PaginationDto) {
-    const { limit = 10, offset = 0 } = paginationDto;
     const options = {
       page: paginationDto.page || 1,
       limit: paginationDto.limit || 10,
     };
-    
+
     const pagination = await this.paginate(options);
     return pagination;
   }

@@ -7,6 +7,6 @@ import { AuthModule } from '../auth/auth.module';
 @Module({
   controllers: [SeedController],
   providers: [SeedService],
-  imports: [ProductsModule,AuthModule],
+  imports: [ProductsModule, AuthModule],
 })
 export class SeedModule {}
