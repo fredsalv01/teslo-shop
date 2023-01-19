@@ -24,6 +24,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
+  // @Auth(ValidRoles.superUser, ValidRoles.admin)
   create(@Body() createUserDto: CreateUserDto) {
     return this.authService.create(createUserDto);
   }
