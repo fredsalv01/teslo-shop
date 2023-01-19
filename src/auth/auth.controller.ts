@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Auth } from './decorators';
 import { GetUser } from './decorators/get-user.decorator';

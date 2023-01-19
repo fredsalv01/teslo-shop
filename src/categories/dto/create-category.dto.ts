@@ -1,7 +1,6 @@
-import { IsOptional, IsString } from "class-validator";
+import { IsOptional, IsString } from 'class-validator';
 
 export class CreateCategoryDto {
-
   @IsString({ message: 'El nombre de la categoría es obligatorio' })
   name: string;
 

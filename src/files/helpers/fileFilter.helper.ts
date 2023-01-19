@@ -4,7 +4,7 @@ import { Request } from 'express';
 export const fileFilter = (
   req: Request,
   file: Express.Multer.File,
-  cb: Function,
+  cb: CallBackFileFilter,
 ) => {
   if (!file) {
     cb(new Error('No se ha seleccionado ningun archivo!'), false);
@@ -21,3 +21,8 @@ export const fileFilter = (
     );
   }
 };
+
+export type CallBackFileFilter = (
+  error: Error | null,
+  acceptFile: boolean,
+) => void;

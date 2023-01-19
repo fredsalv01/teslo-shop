@@ -89,9 +89,7 @@ export class AuthService {
     }
   }
 
-  async requestResetPassword(
-    requestResetPasswordDto: RequestResetPasswordDto,
-  ) {
+  async requestResetPassword(requestResetPasswordDto: RequestResetPasswordDto) {
     const { email } = requestResetPasswordDto;
     const user = await this.userRepository.findOne({
       where: { email },
@@ -102,7 +100,10 @@ export class AuthService {
     user.resetPasswordToken = uuid();
     await this.userRepository.save(user);
 
-    await this.mailService.sendResetPasswordToken(user, user.resetPasswordToken);
+    await this.mailService.sendResetPasswordToken(
+      user,
+      user.resetPasswordToken,
+    );
     // TODO: Send email using email service
     return { message: 'Se ha enviado un email a tu cuenta' };
   }
