@@ -20,7 +20,7 @@ import { ConfigService } from "@nestjs/config";
           },
         },
         defaults: {
-          from: '"Fred Foo 👻" <noreply@example.com>',
+          from: "👚🌊<wishywashy@noreply.com>",
         },
         template: {
           dir: join(__dirname, "templates"),
