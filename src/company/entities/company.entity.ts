@@ -1,3 +1,4 @@
+import { Branch } from "src/branches/entities/branch.entity";
 import { User } from "src/auth/entities/user.entity";
 import {
   BeforeInsert,
@@ -61,6 +62,12 @@ export class Company {
     eager: true,
   })
   users?: User[];
+
+  @OneToMany(() => Branch, (branch) => branch.company, {
+    cascade: true,
+    eager: true,
+  })
+  branches?: Branch[];
 
   @BeforeInsert()
   updateSlugBeforeInsert() {
