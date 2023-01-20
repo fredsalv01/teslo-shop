@@ -12,12 +12,33 @@ interface SeedProduct {
   type: ValidTypes;
   available: number;
 }
+interface SeedUsers {
+  fullname: string;
+  documentType: ValidDocumentType;
+  documentNumber: string;
+  email: string;
+  company: number;
+  password: string;
+  roles: ValidRoles[];
+}
+
+interface SeedCompany {
+  socialReason: string;
+  comercialName: string;
+  status: boolean;
+  maxUsers: number;
+  slug: string;
+}
 
 type ValidSizes = "XS" | "S" | "M" | "L" | "XL" | "XXL" | "XXXL";
 type ValidTypes = "shirts" | "pants" | "hoodies" | "hats";
+type ValidDocumentType = "RUC" | "DNI" | "CE";
+type ValidRoles = "admin" | "super-user" | "user";
 
 interface SeedData {
   products: SeedProduct[];
+  companies: SeedCompany[];
+  users: SeedUsers[];
 }
 
 export const initialData: SeedData = {
@@ -699,6 +720,33 @@ export const initialData: SeedData = {
       tags: ["shirt"],
       title: "Kids Corp Jacket",
       available: 1,
+    },
+  ],
+  companies: [
+    {
+      socialReason: "11111111111",
+      comercialName: "TesloLaundry",
+      status: true,
+      maxUsers: 10,
+      slug: "teslo-laundry",
+    },
+    {
+      socialReason: "22222222222",
+      comercialName: "WindowsLaundry",
+      status: true,
+      maxUsers: 5,
+      slug: "windows-laundry",
+    },
+  ],
+  users: [
+    {
+      fullname: "admin",
+      documentType: "DNI",
+      documentNumber: "12345678",
+      email: "admin@admin.com",
+      company: null,
+      password: "Admin1$trator",
+      roles: ["admin"],
     },
   ],
 };

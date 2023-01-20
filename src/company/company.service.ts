@@ -102,4 +102,13 @@ export class CompanyService {
 
     return await paginate<Company>(queryBuilder, options);
   }
+
+  async deleteAllCompanies() {
+    const query = this.companyRepository.createQueryBuilder("companies");
+    try {
+      return await query.delete().where({}).execute();
+    } catch (error) {
+      this.handleDBExceptions(error);
+    }
+  }
 }
