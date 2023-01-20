@@ -43,8 +43,8 @@ export class BranchesService {
 
   async findAll(paginationDto: PaginationDto) {
     const options = {
-      page: paginationDto.page,
-      limit: paginationDto.limit,
+      page: paginationDto.page || 1,
+      limit: paginationDto.limit || 10,
     };
     return await this.paginate(options);
   }

@@ -7,11 +7,13 @@ import {
   Param,
   Delete,
 } from "@nestjs/common";
+import { ApiTags } from "@nestjs/swagger/dist";
 import { PaginationDto } from "src/common/dtos/pagination.dto";
 import { BrandsService } from "./brands.service";
 import { CreateBrandDto } from "./dto/create-brand.dto";
 import { UpdateBrandDto } from "./dto/update-brand.dto";
 
+@ApiTags("brands")
 @Controller("brands")
 export class BrandsController {
   constructor(private readonly brandsService: BrandsService) {}
