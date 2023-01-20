@@ -1,4 +1,5 @@
 import {
+  IsArray,
   IsEmail,
   IsIn,
   IsNumber,
@@ -8,6 +9,7 @@ import {
   MaxLength,
   MinLength,
 } from "class-validator";
+import { ValidRoles } from "../interfaces";
 
 export class CreateUserDto {
   @IsString()
@@ -49,4 +51,12 @@ export class CreateUserDto {
     }
   )
   password: string;
+
+  @IsOptional()
+  @IsString({
+    each: true,
+  })
+  @IsArray()
+  @IsIn([ValidRoles.admin, ValidRoles.superUser, ValidRoles.user])
+  roles: string[];
 }

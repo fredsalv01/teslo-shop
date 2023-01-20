@@ -25,7 +25,7 @@ import { MailModule } from "../mail/mail.module";
       useFactory: () => {
         return {
           secret: process.env.JWT_SECRET,
-          signOptions: { expiresIn: "10s" },
+          signOptions: { expiresIn: "1h" },
         };
       },
     }),

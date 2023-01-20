@@ -123,6 +123,15 @@ export class AuthService {
     return { message: "Contraseña actualizada correctamente" };
   }
 
+  async deleteAllUsers() {
+    const query = this.userRepository.createQueryBuilder("user");
+    try {
+      return await query.delete().where({}).execute();
+    } catch (error) {
+      this.handleDBErrors(error);
+    }
+  }
+
   private getJwtToken(payload: JwtPayload) {
     return this.jwtService.sign(payload);
   }
