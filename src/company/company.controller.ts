@@ -8,12 +8,14 @@ import {
   Delete,
   Query,
 } from "@nestjs/common";
+import { ApiTags } from "@nestjs/swagger/dist";
 import { Auth } from "src/auth/decorators";
 import { ValidRoles } from "src/auth/interfaces";
 import { PaginationDto } from "src/common/dtos/pagination.dto";
 import { CompanyService } from "./company.service";
 import { CreateCompanyDto, UpdateCompanyDto } from "./dto";
 
+@ApiTags("companies")
 @Controller("companies")
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
