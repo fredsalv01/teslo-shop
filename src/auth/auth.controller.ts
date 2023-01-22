@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Patch } from "@nestjs/common";
-import { ApiTags } from "@nestjs/swagger/dist";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger/dist";
 import { AuthService } from "./auth.service";
 import { Auth } from "./decorators";
 import { GetUser } from "./decorators/get-user.decorator";
@@ -29,6 +29,7 @@ export class AuthController {
   }
 
   @Get("private")
+  @ApiBearerAuth()
   @Auth(ValidRoles.superUser, ValidRoles.admin)
   GetAuthUserInfo(@GetUser() user: User) {
     return {
