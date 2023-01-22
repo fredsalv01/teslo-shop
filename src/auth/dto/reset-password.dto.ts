@@ -1,3 +1,4 @@
+import { ApiProperty } from "@nestjs/swagger";
 import {
   IsString,
   Matches,
@@ -8,10 +9,18 @@ import {
 } from "class-validator";
 
 export class ResetPasswordDto {
+  @ApiProperty({
+    description: "Token",
+    example: "a0a0a0a0-a0a0-a0a0-a0a0-a0a0a0a0a0a0",
+  })
   @IsNotEmpty({ message: "El token es obligatorio" })
   @IsUUID("4", { message: "El token es incorrecto" })
   resetPasswordToken: string;
 
+  @ApiProperty({
+    description: "Password",
+    example: "Adm1ni$trador",
+  })
   @IsString({ message: "La contraseña es obligatoria" })
   @MinLength(6, { message: "La contraseña debe tener al menos 6 caracteres" })
   @MaxLength(50, { message: "La contraseña debe tener máximo 50 caracteres" })
