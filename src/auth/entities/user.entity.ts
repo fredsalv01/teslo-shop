@@ -40,9 +40,6 @@ export class User {
   })
   company?: Company;
 
-  @Column("uuid", { unique: true, name: "userActiveToken", nullable: true })
-  userActiveToken: string;
-
   @Column("uuid", { unique: true, name: "resetPasswordToken", nullable: true })
   resetPasswordToken: string;
 

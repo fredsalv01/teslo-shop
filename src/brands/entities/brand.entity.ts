@@ -1,12 +1,8 @@
-import { Branch } from "src/branches/entities/branch.entity";
-import { Product } from "src/products/entities";
 import {
   BeforeInsert,
   BeforeUpdate,
   Column,
   Entity,
-  ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 
@@ -31,18 +27,6 @@ export class Brand {
     default: true,
   })
   isActive: boolean;
-
-  @ManyToOne(() => Branch, (branch) => branch.brands, {
-    onDelete: "CASCADE",
-    nullable: false,
-  })
-  branch: Branch;
-
-  @OneToMany(() => Product, (product) => product.brand, {
-    cascade: true,
-    eager: true,
-  })
-  products: Product[];
 
   @Column({
     type: "timestamptz",

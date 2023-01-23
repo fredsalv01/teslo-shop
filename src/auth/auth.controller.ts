@@ -53,9 +53,4 @@ export class AuthController {
   resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
     return this.authService.resetPassword(resetPasswordDto);
   }
-
-  @Patch("confirm-account")
-  confirmAccount(@Body("token") token: string) {
-    return this.authService.confirmAccount(token);
-  }
 }

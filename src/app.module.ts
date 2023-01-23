@@ -13,7 +13,6 @@ import { CompanyModule } from "./company/company.module";
 import { MailModule } from "./mail/mail.module";
 import { BrandsModule } from "./brands/brands.module";
 import { BranchesModule } from "./branches/branches.module";
-import { SubcategoriesModule } from "./subcategories/subcategories.module";
 
 @Module({
   imports: [
@@ -44,7 +43,6 @@ import { SubcategoriesModule } from "./subcategories/subcategories.module";
     MailModule,
     BrandsModule,
     BranchesModule,
-    SubcategoriesModule,
   ],
 })
 export class AppModule {}

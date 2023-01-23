@@ -33,17 +33,12 @@ export class AuthService {
   async create(createUserDto: CreateUserDto) {
     try {
       const { password, company, ...userData } = createUserDto;
-      const userActiveToken = uuid();
       const user = this.userRepository.create({
         ...userData,
         company: company ? { id: company } : null,
         password: bcrypt.hashSync(password, 10),
-        userActiveToken,
-        isActive: false,
       });
       await this.userRepository.save(user);
-
-      await this.mailService.sendConfirmEmail(user);
       return user;
     } catch (error) {
       Logger.error(error);
@@ -55,13 +50,11 @@ export class AuthService {
     try {
       const { email, password } = loginUserDto;
       const user = await this.userRepository.findOne({
-        where: { email, isActive: true },
+        where: { email },
         select: ["id", "email", "password", "roles"],
       });
       if (!user) {
-        throw new UnauthorizedException(
-          "El email es incorrecto o no esta activo"
-        );
+        throw new UnauthorizedException("El email es incorrecto");
       }
       if (!bcrypt.compareSync(password, user.password)) {
         throw new UnauthorizedException("La contraseña es incorrecta");
@@ -94,19 +87,6 @@ export class AuthService {
       Logger.error(error);
       throw new UnauthorizedException("El token no es válido");
     }
-  }
-
-  async confirmAccount(token: string) {
-    const user = await this.userRepository.findOne({
-      where: { userActiveToken: token },
-    });
-    if (!user) {
-      throw new NotFoundException("El token no es válido");
-    }
-    user.isActive = true;
-    user.userActiveToken = null;
-    await this.userRepository.save(user);
-    return { message: "Cuenta activada correctamente" };
   }
 
   async requestResetPassword(requestResetPasswordDto: RequestResetPasswordDto) {
