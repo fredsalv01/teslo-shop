@@ -30,13 +30,15 @@ export class AuthController {
 
   @Get("private")
   @ApiBearerAuth()
-  @Auth(ValidRoles.superUser, ValidRoles.admin)
+  @Auth(ValidRoles.user, ValidRoles.superUser, ValidRoles.admin)
   GetAuthUserInfo(@GetUser() user: User) {
     return {
       user,
     };
   }
 
+  @ApiBearerAuth()
+  @Auth(ValidRoles.user, ValidRoles.superUser, ValidRoles.admin)
   @Post("refresh")
   refresh(@Body("refreshToken") refreshToken: string) {
     return this.authService.refresh(refreshToken);

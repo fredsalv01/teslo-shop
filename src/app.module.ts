@@ -14,6 +14,7 @@ import { MailModule } from "./mail/mail.module";
 import { BrandsModule } from "./brands/brands.module";
 import { BranchesModule } from "./branches/branches.module";
 import { SubcategoriesModule } from "./subcategories/subcategories.module";
+import { ProvidersModule } from "./providers/providers.module";
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { SubcategoriesModule } from "./subcategories/subcategories.module";
     BrandsModule,
     BranchesModule,
     SubcategoriesModule,
+    ProvidersModule,
   ],
 })
 export class AppModule {}

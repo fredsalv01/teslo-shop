@@ -54,17 +54,13 @@ export class SubcategoriesService {
   }
 
   async findOneSubcategoryByTerm(term: string) {
-    const subcategory =
-      this.subcategoryRepository.createQueryBuilder("subcategory");
-    subcategory.where("subcategory.name like :name", { name: `%${term}%` });
-    subcategory.andWhere("subcategory.isActive = :isActive", {
-      isActive: true,
-    });
-    subcategory.getOne();
-
-    if (!subcategory) {
-      throw new NotFoundException(`Brand with term ${term} not found`);
-    }
+    const subcategory = this.subcategoryRepository
+      .createQueryBuilder("subcategory")
+      .where("subcategory.name like :name", { name: `%${term}%` })
+      .andWhere("subcategory.isActive = :isActive", {
+        isActive: true,
+      })
+      .getOne();
     return subcategory;
   }
 
