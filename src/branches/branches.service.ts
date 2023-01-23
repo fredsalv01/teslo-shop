@@ -77,7 +77,7 @@ export class BranchesService {
       ...updateBranchDto,
     });
     if (!branch) {
-      throw new NotFoundException(`Company with id ${id} not found`);
+      throw new NotFoundException(`Branch with id ${id} not found`);
     }
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();

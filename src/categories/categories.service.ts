@@ -46,7 +46,7 @@ export class CategoriesService {
 
   async findOne(id: number) {
     const category = await this.categoryRepository.findOne({
-      where: { id, is_active: true },
+      where: { id, isActive: true },
     });
     if (!category) {
       throw new NotFoundException(`Category with id ${id} not found`);
@@ -83,7 +83,7 @@ export class CategoriesService {
     if (!category) {
       throw new NotFoundException(`Category with id ${id} not found`);
     }
-    this.categoryRepository.update({ id }, { is_active: false });
+    this.categoryRepository.update({ id }, { isActive: false });
     return { message: `The category with id ${id} has been deleted` };
   }
 

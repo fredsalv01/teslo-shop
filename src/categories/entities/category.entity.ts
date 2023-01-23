@@ -1,10 +1,15 @@
+import { Subcategory } from "./../../subcategories/entities/subcategory.entity";
+import { ManyToOne } from "typeorm";
 import {
   BeforeInsert,
   BeforeUpdate,
   Column,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import { Branch } from "src/branches/entities/branch.entity";
+import { Product } from "src/products/entities";
 
 @Entity("categories")
 export class Category {
@@ -18,7 +23,25 @@ export class Category {
   slug: string;
 
   @Column("boolean", { default: true })
-  is_active: boolean;
+  isActive: boolean;
+
+  @OneToMany(() => Subcategory, (subcategory) => subcategory.category, {
+    cascade: true,
+    eager: true,
+  })
+  subcategories: Subcategory[];
+
+  @ManyToOne(() => Branch, (branch) => branch.categories, {
+    onDelete: "CASCADE",
+    nullable: true,
+  })
+  branch: Branch;
+
+  @OneToMany(() => Product, (product) => product.category, {
+    cascade: true,
+    eager: true,
+  })
+  products: Product[];
 
   @Column("timestamptz", {
     nullable: false,

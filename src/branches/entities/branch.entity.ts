@@ -1,4 +1,8 @@
+import { Brand } from "src/brands/entities/brand.entity";
+import { Category } from "src/categories/entities/category.entity";
 import { Company } from "src/company/entities/company.entity";
+import { Product } from "src/products/entities";
+import { Subcategory } from "src/subcategories/entities/subcategory.entity";
 import {
   Column,
   Entity,
@@ -6,6 +10,7 @@ import {
   ManyToOne,
   BeforeInsert,
   BeforeUpdate,
+  OneToMany,
 } from "typeorm";
 
 @Entity("branches")
@@ -25,8 +30,35 @@ export class Branch {
   })
   slug: string;
 
-  @ManyToOne(() => Company, (company) => company.branches)
+  @ManyToOne(() => Company, (company) => company.branches, {
+    onDelete: "CASCADE",
+    nullable: false,
+  })
   company: Company;
+
+  @OneToMany(() => Category, (category) => category.branch, {
+    cascade: true,
+    eager: true,
+  })
+  categories: Category[];
+
+  @OneToMany(() => Subcategory, (subcategory) => subcategory.branch, {
+    cascade: true,
+    eager: true,
+  })
+  subcategories: Subcategory[];
+
+  @OneToMany(() => Brand, (brand) => brand.branch, {
+    cascade: true,
+    eager: true,
+  })
+  brands: Brand[];
+
+  @OneToMany(() => Product, (product) => product.branch, {
+    cascade: true,
+    eager: true,
+  })
+  products: Product[];
 
   @Column({
     type: "timestamptz",
