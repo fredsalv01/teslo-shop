@@ -1,9 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ProvidersService } from './providers.service';
-import { CreateProviderDto } from './dto/create-provider.dto';
-import { UpdateProviderDto } from './dto/update-provider.dto';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from "@nestjs/common";
+import { ProvidersService } from "./providers.service";
+import { CreateProviderDto, UpdateProviderDto } from "./dto";
+import { PaginationDto } from "src/common/dtos/pagination.dto";
+import { ApiTags } from "@nestjs/swagger/dist";
 
-@Controller('providers')
+@ApiTags("providers")
+@Controller("providers")
 export class ProvidersController {
   constructor(private readonly providersService: ProvidersService) {}
 
@@ -13,22 +23,25 @@ export class ProvidersController {
   }
 
   @Get()
-  findAll() {
-    return this.providersService.findAll();
+  findAll(@Param() paginationDto: PaginationDto) {
+    return this.providersService.findAll(paginationDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
+  @Get(":id")
+  findOne(@Param("id") id: string) {
     return this.providersService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProviderDto: UpdateProviderDto) {
+  @Patch(":id")
+  update(
+    @Param("id") id: string,
+    @Body() updateProviderDto: UpdateProviderDto
+  ) {
     return this.providersService.update(+id, updateProviderDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @Delete(":id")
+  remove(@Param("id") id: string) {
     return this.providersService.remove(+id);
   }
 }

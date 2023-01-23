@@ -25,20 +25,23 @@ export class BranchesService {
   ) {}
 
   async create(createBranchDto: CreateBranchDto) {
+    const { company, ...restData } = createBranchDto;
+    const findBranch = await this.findOneBranchesByTerm(createBranchDto.name);
+    if (findBranch) {
+      throw new BadRequestException(
+        `Branch with name ${createBranchDto.name} already exists`
+      );
+    }
     try {
-      const findBranch = await this.findOneBranchesByTerm(createBranchDto.name);
-      if (findBranch) {
-        throw new BadRequestException(
-          `Branch with name ${createBranchDto.name} already exists`
-        );
-      }
-      const branch = this.branchRepository.create(createBranchDto);
+      const branch = this.branchRepository.create({
+        ...restData,
+        company: { id: company },
+      });
       await this.branchRepository.save(branch);
       return branch;
     } catch (error) {
       this.handleDBExceptions(error);
     }
-    return "This action adds a new branch";
   }
 
   async findAll(paginationDto: PaginationDto) {
@@ -59,22 +62,21 @@ export class BranchesService {
     return branch;
   }
 
-  findOneBranchesByTerm(term: string) {
-    const branch = this.branchRepository.createQueryBuilder("branch");
-    branch.where("branch.name like :name", { name: `%${term}%` });
-    branch.andWhere("branch.isActive = :isActive", { isActive: true });
-    branch.getOne();
-
-    if (!branch) {
-      throw new NotFoundException(`Brand with term ${term} not found`);
-    }
+  async findOneBranchesByTerm(term: string) {
+    const branch = await this.branchRepository
+      .createQueryBuilder("branches")
+      .where("branches.name like :name", { name: `%${term}%` })
+      .andWhere("branches.isActive = :isActive", { isActive: true })
+      .getOne();
     return branch;
   }
 
   async update(id: number, updateBranchDto: UpdateBranchDto) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { company, ...restData } = updateBranchDto;
     const branch = await this.branchRepository.preload({
       id: id,
-      ...updateBranchDto,
+      ...restData,
     });
     if (!branch) {
       throw new NotFoundException(`Branch with id ${id} not found`);

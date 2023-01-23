@@ -14,7 +14,7 @@ import { MailModule } from "./mail/mail.module";
 import { BrandsModule } from "./brands/brands.module";
 import { BranchesModule } from "./branches/branches.module";
 import { SubcategoriesModule } from "./subcategories/subcategories.module";
-import { ProvidersModule } from './providers/providers.module';
+import { ProvidersModule } from "./providers/providers.module";
 
 @Module({
   imports: [

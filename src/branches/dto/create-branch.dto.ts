@@ -19,10 +19,10 @@ export class CreateBranchDto {
   slug: string;
 
   @ApiProperty({
-    description: "Branch address",
-    example: "Branch Address",
+    description: "Branch CompanyId",
+    example: 1,
   })
   @IsNotEmpty()
   @IsNumber()
-  companyId: number;
+  company: number;
 }
