@@ -1,3 +1,4 @@
+import { Category } from "src/categories/entities/category.entity";
 import { Company } from "src/company/entities/company.entity";
 import {
   Column,
@@ -6,6 +7,7 @@ import {
   ManyToOne,
   BeforeInsert,
   BeforeUpdate,
+  OneToMany,
 } from "typeorm";
 
 @Entity("branches")
@@ -25,8 +27,17 @@ export class Branch {
   })
   slug: string;
 
-  @ManyToOne(() => Company, (company) => company.branches)
+  @ManyToOne(() => Company, (company) => company.branches, {
+    onDelete: "CASCADE",
+    nullable: false,
+  })
   company: Company;
+
+  @OneToMany(() => Category, (category) => category.branch, {
+    cascade: true,
+    eager: true,
+  })
+  categories: Category[];
 
   @Column({
     type: "timestamptz",

@@ -4,10 +4,10 @@ import { CreateCategoryDto } from "./create-category.dto";
 
 export class UpdateCategoryDto extends PartialType(CreateCategoryDto) {
   @ApiProperty({
-    description: "is_active",
+    description: "isActive",
     example: false,
   })
   @IsOptional()
   @IsBoolean()
-  is_active: boolean;
+  isActive: boolean;
 }
