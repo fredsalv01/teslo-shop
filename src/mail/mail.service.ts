@@ -18,4 +18,17 @@ export class MailService {
       },
     });
   }
+
+  async sendConfirmEmail(user: User) {
+    const url = `http://localhost:3000/auth/confirm-account/${user.userActiveToken}`;
+    await this.mailerService.sendMail({
+      to: user.email,
+      subject: "WashyWashy - Welcome",
+      template: "confirm-account",
+      context: {
+        name: user.fullname,
+        url,
+      },
+    });
+  }
 }
