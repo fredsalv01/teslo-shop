@@ -9,6 +9,7 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Branch } from "src/branches/entities/branch.entity";
+import { Product } from "src/products/entities";
 
 @Entity("categories")
 export class Category {
@@ -35,6 +36,12 @@ export class Category {
     nullable: true,
   })
   branch: Branch;
+
+  @OneToMany(() => Product, (product) => product.category, {
+    cascade: true,
+    eager: true,
+  })
+  products: Product[];
 
   @Column("timestamptz", {
     nullable: false,
