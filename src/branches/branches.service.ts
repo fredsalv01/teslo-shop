@@ -59,9 +59,23 @@ export class BranchesService {
     return await this.paginate(options, null);
   }
 
-  findOne(id: number) {
+  async findOne(id: number, user: User) {
+    const userData = await this.authService.getUserData(user.id);
+    if (userData.companyId !== null) {
+      return this.findOneBranchesByCompany(id, userData.companyId);
+    }
     const branch = this.branchRepository.findOne({
       where: { id, isActive: true },
+    });
+    if (!branch) {
+      throw new NotFoundException(`Branch with id ${id} not found`);
+    }
+    return branch;
+  }
+
+  async findOneBranchesByCompany(id: number, companyId: number) {
+    const branch = await this.branchRepository.findOne({
+      where: { id, isActive: true, company: { id: companyId } },
     });
     if (!branch) {
       throw new NotFoundException(`Branch with id ${id} not found`);

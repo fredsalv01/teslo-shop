@@ -33,16 +33,19 @@ export class BranchesController {
   }
 
   @Get(":id")
-  findOne(@Param("id") id: string) {
-    return this.branchesService.findOne(+id);
+  @Auth(ValidRoles.superUser, ValidRoles.admin)
+  findOne(@Param("id") id: string, @GetUser() user: User) {
+    return this.branchesService.findOne(+id, user);
   }
 
   @Patch(":id")
+  @Auth(ValidRoles.superUser, ValidRoles.admin)
   update(@Param("id") id: string, @Body() updateBranchDto: UpdateBranchDto) {
     return this.branchesService.update(+id, updateBranchDto);
   }
 
   @Delete(":id")
+  @Auth(ValidRoles.superUser, ValidRoles.admin)
   remove(@Param("id") id: string) {
     return this.branchesService.remove(+id);
   }
