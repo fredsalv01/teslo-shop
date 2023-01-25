@@ -7,7 +7,10 @@ import {
   Param,
   Delete,
 } from "@nestjs/common";
-import { ApiTags } from "@nestjs/swagger/dist";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger/dist";
+import { Auth, GetUser } from "src/auth/decorators";
+import { User } from "src/auth/entities/user.entity";
+import { ValidRoles } from "src/auth/interfaces";
 import { PaginationDto } from "src/common/dtos/pagination.dto";
 import { BranchesService } from "./branches.service";
 import { CreateBranchDto, UpdateBranchDto } from "./dto";
@@ -23,8 +26,10 @@ export class BranchesController {
   }
 
   @Get()
-  findAll(@Param() paginationDto: PaginationDto) {
-    return this.branchesService.findAll(paginationDto);
+  @ApiBearerAuth()
+  @Auth(ValidRoles.user, ValidRoles.superUser, ValidRoles.admin)
+  findAll(@GetUser() user: User, @Param() paginationDto: PaginationDto) {
+    return this.branchesService.findAll(paginationDto, user);
   }
 
   @Get(":id")

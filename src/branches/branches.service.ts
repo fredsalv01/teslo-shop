@@ -10,10 +10,12 @@ import {
   paginate,
   Pagination,
 } from "nestjs-typeorm-paginate";
+import { User } from "src/auth/entities/user.entity";
 import { PaginationDto } from "src/common/dtos/pagination.dto";
 import { DataSource, Repository } from "typeorm";
 import { CreateBranchDto, UpdateBranchDto } from "./dto";
 import { Branch } from "./entities/branch.entity";
+import { AuthService } from "../auth/auth.service";
 
 @Injectable()
 export class BranchesService {
@@ -21,7 +23,8 @@ export class BranchesService {
   constructor(
     @InjectRepository(Branch)
     private readonly branchRepository: Repository<Branch>,
-    private readonly dataSource: DataSource
+    private readonly dataSource: DataSource,
+    private readonly authService: AuthService
   ) {}
 
   async create(createBranchDto: CreateBranchDto) {
@@ -44,12 +47,16 @@ export class BranchesService {
     }
   }
 
-  async findAll(paginationDto: PaginationDto) {
+  async findAll(paginationDto: PaginationDto, user: User) {
+    const userData = await this.authService.getUserData(user.id);
     const options = {
       page: paginationDto.page || 1,
       limit: paginationDto.limit || 10,
     };
-    return await this.paginate(options);
+    if (userData.companyId !== null) {
+      return await this.paginate(options, userData.companyId);
+    }
+    return await this.paginate(options, null);
   }
 
   findOne(id: number) {
@@ -108,11 +115,16 @@ export class BranchesService {
     return { message: `Branch with ${id} has been inactivated` };
   }
 
-  async paginate(options: IPaginationOptions): Promise<Pagination<Branch>> {
-    const qb = this.branchRepository
-      .createQueryBuilder("q")
-      .andWhere("q.isActive = :isActive", { isActive: true })
-      .orderBy("q.id", "DESC");
+  async paginate(
+    options: IPaginationOptions,
+    companyId: number | null
+  ): Promise<Pagination<Branch>> {
+    const qb = this.branchRepository.createQueryBuilder("q");
+    if (companyId !== null) {
+      qb.where("q.companyId = :companyId", { companyId: companyId });
+    }
+    qb.andWhere("q.isActive = :isActive", { isActive: true });
+    qb.orderBy("q.id", "DESC");
     return await paginate<Branch>(qb, options);
   }
 

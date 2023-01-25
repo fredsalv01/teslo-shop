@@ -32,9 +32,7 @@ export class AuthController {
   @ApiBearerAuth()
   @Auth(ValidRoles.user, ValidRoles.superUser, ValidRoles.admin)
   GetAuthUserInfo(@GetUser() user: User) {
-    return {
-      user,
-    };
+    return this.authService.getUserData(user.id);
   }
 
   @ApiBearerAuth()
