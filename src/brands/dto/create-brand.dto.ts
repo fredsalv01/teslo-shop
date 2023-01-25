@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsOptional, IsString } from "class-validator";
 export class CreateBrandDto {
   @ApiProperty({
     description: "Brand name",
@@ -8,4 +8,12 @@ export class CreateBrandDto {
   @IsString()
   @IsNotEmpty({ message: "El nombre de la marca es obligatorio" })
   name: string;
+
+  @ApiProperty({
+    description: "Branch id",
+    example: 1,
+  })
+  @IsString()
+  @IsOptional()
+  branch: number;
 }

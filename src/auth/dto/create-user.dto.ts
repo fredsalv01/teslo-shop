@@ -93,4 +93,19 @@ export class CreateUserDto {
   @IsArray()
   @IsIn([ValidRoles.admin, ValidRoles.superUser, ValidRoles.user])
   roles: string[];
+
+  @ApiProperty({
+    description: "Branches",
+    example: [1, 2, 3],
+    default: [],
+  })
+  @IsOptional()
+  @IsNumber(
+    {},
+    {
+      each: true,
+    }
+  )
+  @IsArray()
+  branches: number[];
 }

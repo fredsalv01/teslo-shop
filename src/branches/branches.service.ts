@@ -95,6 +95,12 @@ export class BranchesService {
   async update(id: number, updateBranchDto: UpdateBranchDto) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { company, ...restData } = updateBranchDto;
+    const findBranch = await this.findOneBranchesByTerm(updateBranchDto.name);
+    if (findBranch && findBranch.id !== id) {
+      throw new BadRequestException(
+        `Branch with name ${updateBranchDto.name} already exists`
+      );
+    }
     const branch = await this.branchRepository.preload({
       id: id,
       ...restData,

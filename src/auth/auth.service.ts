@@ -97,6 +97,7 @@ export class AuthService {
       documentType: data.documentType,
       documentNumber: data.documentNumber,
       roles: data.roles,
+      branches: data.branches,
       companyId: data.company !== null ? data.company.id : null,
       companyName: data.company !== null ? data.company.comercialName : null,
       companyRuc: data.company !== null ? data.company.socialReason : null,

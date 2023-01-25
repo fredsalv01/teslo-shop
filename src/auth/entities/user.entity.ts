@@ -40,6 +40,9 @@ export class User {
   })
   company?: Company;
 
+  @Column("integer", { array: true, default: [] })
+  branches: number[];
+
   @Column("uuid", { unique: true, name: "userActiveToken", nullable: true })
   userActiveToken: string;
 
@@ -49,10 +52,14 @@ export class User {
   @BeforeInsert()
   checkFieldsBeforeInsert() {
     this.email = this.email.toLowerCase().trim();
+    this.documentNumber = this.documentNumber.trim();
+    this.documentType = this.documentType.trim();
+    this.fullname = this.fullname.trim();
   }
 
   @BeforeUpdate()
   checkFieldsBeforeUpdate() {
     this.checkFieldsBeforeInsert();
+    this.branches = this.branches.filter((branch) => branch !== null).sort();
   }
 }
