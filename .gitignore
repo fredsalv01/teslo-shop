@@ -38,3 +38,6 @@ lerna-debug.log*
 /postgres
 /static/products
 /public/products
+
+#env
+.env
