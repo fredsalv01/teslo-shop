@@ -7,7 +7,7 @@ export class MailService {
   constructor(private readonly mailerService: MailerService) {}
 
   async sendResetPasswordToken(user: User, token: string) {
-    const url = `http://localhost:3000/auth/reset-password/${token}`;
+    const url = `https://laundy-app.onrender.com/api/auth/reset-password/${token}`;
     await this.mailerService.sendMail({
       to: user.email,
       subject: "WashyWashy - Reset Password",
@@ -20,7 +20,7 @@ export class MailService {
   }
 
   async sendConfirmEmail(user: User) {
-    const url = `http://localhost:3000/auth/confirm-account/${user.userActiveToken}`;
+    const url = `https://laundy-app.onrender.com/api/auth/confirm-account/${user.userActiveToken}`;
     await this.mailerService.sendMail({
       to: user.email,
       subject: "WashyWashy - Welcome",
