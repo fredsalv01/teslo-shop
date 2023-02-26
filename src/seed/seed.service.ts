@@ -20,15 +20,15 @@ export class SeedService {
     await this.authService.deleteAllUsers();
     await this.companyService.deleteAllCompanies();
 
-    const products = initialData.products;
+    // const products = initialData.products;
     const users = initialData.users;
     const companies = initialData.companies;
 
     const insertPromises = [];
 
-    products.forEach((product) => {
-      insertPromises.push(this.productService.create(product));
-    });
+    // products.forEach((product) => {
+    //   insertPromises.push(this.productService.create(product));
+    // });
     companies.forEach((company) => {
       insertPromises.push(this.companyService.create(company));
     });
