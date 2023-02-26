@@ -40,6 +40,7 @@ export class BrandsController {
   }
 
   @Patch(":id")
+  @Auth(ValidRoles.admin, ValidRoles.superUser)
   update(@Param("id") id: string, @Body() updateBrandDto: UpdateBrandDto) {
     return this.brandsService.update(+id, updateBrandDto);
   }
