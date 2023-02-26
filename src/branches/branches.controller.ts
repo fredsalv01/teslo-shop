@@ -7,7 +7,10 @@ import {
   Param,
   Delete,
 } from "@nestjs/common";
-import { ApiTags } from "@nestjs/swagger/dist";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger/dist";
+import { Auth, GetUser } from "src/auth/decorators";
+import { User } from "src/auth/entities/user.entity";
+import { ValidRoles } from "src/auth/interfaces";
 import { PaginationDto } from "src/common/dtos/pagination.dto";
 import { BranchesService } from "./branches.service";
 import { CreateBranchDto, UpdateBranchDto } from "./dto";
@@ -23,21 +26,26 @@ export class BranchesController {
   }
 
   @Get()
-  findAll(@Param() paginationDto: PaginationDto) {
-    return this.branchesService.findAll(paginationDto);
+  @ApiBearerAuth()
+  @Auth(ValidRoles.user, ValidRoles.superUser, ValidRoles.admin)
+  findAll(@GetUser() user: User, @Param() paginationDto: PaginationDto) {
+    return this.branchesService.findAll(paginationDto, user);
   }
 
   @Get(":id")
-  findOne(@Param("id") id: string) {
-    return this.branchesService.findOne(+id);
+  @Auth(ValidRoles.superUser, ValidRoles.admin)
+  findOne(@Param("id") id: string, @GetUser() user: User) {
+    return this.branchesService.findOne(+id, user);
   }
 
   @Patch(":id")
+  @Auth(ValidRoles.superUser, ValidRoles.admin)
   update(@Param("id") id: string, @Body() updateBranchDto: UpdateBranchDto) {
     return this.branchesService.update(+id, updateBranchDto);
   }
 
   @Delete(":id")
+  @Auth(ValidRoles.superUser, ValidRoles.admin)
   remove(@Param("id") id: string) {
     return this.branchesService.remove(+id);
   }

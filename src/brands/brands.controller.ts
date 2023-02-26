@@ -8,6 +8,9 @@ import {
   Delete,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger/dist";
+import { Auth, GetUser } from "src/auth/decorators";
+import { User } from "src/auth/entities/user.entity";
+import { ValidRoles } from "src/auth/interfaces";
 import { PaginationDto } from "src/common/dtos/pagination.dto";
 import { BrandsService } from "./brands.service";
 import { CreateBrandDto } from "./dto/create-brand.dto";
@@ -19,21 +22,25 @@ export class BrandsController {
   constructor(private readonly brandsService: BrandsService) {}
 
   @Post()
-  create(@Body() createBrandDto: CreateBrandDto) {
-    return this.brandsService.create(createBrandDto);
+  @Auth(ValidRoles.admin, ValidRoles.superUser, ValidRoles.user)
+  create(@Body() createBrandDto: CreateBrandDto, @GetUser() user: User) {
+    return this.brandsService.create(createBrandDto, user);
   }
 
   @Get()
-  findAll(@Param() paginationDto: PaginationDto) {
-    return this.brandsService.findAll(paginationDto);
+  @Auth(ValidRoles.admin, ValidRoles.superUser, ValidRoles.user)
+  findAll(@Param() paginationDto: PaginationDto, @GetUser() user: User) {
+    return this.brandsService.findAll(paginationDto, user);
   }
 
   @Get(":id")
-  findOne(@Param("id") id: string) {
-    return this.brandsService.findOne(+id);
+  @Auth(ValidRoles.admin, ValidRoles.superUser, ValidRoles.user)
+  findOne(@Param("id") id: string, @GetUser() user: User) {
+    return this.brandsService.findOne(+id, user);
   }
 
   @Patch(":id")
+  @Auth(ValidRoles.admin, ValidRoles.superUser)
   update(@Param("id") id: string, @Body() updateBrandDto: UpdateBrandDto) {
     return this.brandsService.update(+id, updateBrandDto);
   }

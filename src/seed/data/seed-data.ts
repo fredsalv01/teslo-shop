@@ -20,6 +20,7 @@ interface SeedUsers {
   company: number;
   password: string;
   roles: ValidRoles[];
+  branches: number[];
 }
 
 interface SeedCompany {
@@ -747,6 +748,7 @@ export const initialData: SeedData = {
       company: null,
       password: "Admin1$trator",
       roles: ["admin"],
+      branches: [],
     },
   ],
 };

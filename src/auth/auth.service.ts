@@ -80,6 +80,30 @@ export class AuthService {
     }
   }
 
+  async getUserData(id: number) {
+    const data = await this.userRepository.findOne({
+      where: { id },
+      join: {
+        alias: "user",
+        leftJoinAndSelect: {
+          company: "user.company",
+        },
+      },
+    });
+    return {
+      id: data.id,
+      email: data.email,
+      fullname: data.fullname,
+      documentType: data.documentType,
+      documentNumber: data.documentNumber,
+      roles: data.roles,
+      branches: data.branches,
+      companyId: data.company !== null ? data.company.id : null,
+      companyName: data.company !== null ? data.company.comercialName : null,
+      companyRuc: data.company !== null ? data.company.socialReason : null,
+    };
+  }
+
   refresh(refreshToken: string) {
     try {
       const user = this.jwtService.decode(refreshToken) as JwtPayload;

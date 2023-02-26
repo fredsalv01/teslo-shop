@@ -34,7 +34,7 @@ export class Brand {
 
   @ManyToOne(() => Branch, (branch) => branch.brands, {
     onDelete: "CASCADE",
-    nullable: false,
+    nullable: true,
   })
   branch: Branch;
 
